@@ -105,6 +105,7 @@ export const signupAdmin = (payload) => {
 
 // Employee APIs
 export const getEmployees = () => USE_MOCKS ? mockApi.getEmployees().then(r => r.data) : api.get('/employee').then(r => r.data);
+export const getEmployee = (id) => USE_MOCKS ? Promise.resolve(mockEmployees.find(e => e.id === id || e.employeeId === id) || mockEmployees[0]) : api.get(`/employee/${id}`).then(r => r.data);
 
 // Attendance APIs
 export const getAttendance = () => USE_MOCKS ? mockApi.getAttendance().then(r => r.data) : api.get('/attendance').then(r => r.data);
