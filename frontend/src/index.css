@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global base styles */
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    @apply font-sans bg-gray-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100;
+    background-image: radial-gradient(1200px 600px at 10% -10%, rgba(59,130,246,0.08), transparent),
+                      radial-gradient(1000px 500px at 110% 10%, rgba(139,92,246,0.08), transparent);
+  }
+  ::selection {
+    background: rgba(59,130,246,0.25);
+  }
+}
+
+/* Scrollbar styling */
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #3b82f6, #8b5cf6);
+  border-radius: 9999px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Card utility */
+@layer utilities {
+  .card {
+    @apply bg-white/80 dark:bg-slate-800/60 backdrop-blur-md shadow-card border border-slate-200/60 dark:border-slate-700/50 rounded-xl;
+  }
+}
