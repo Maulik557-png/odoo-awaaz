@@ -33,6 +33,7 @@ public class EmployeeRepository {
             e.setPhone(rs.getString("phone"));
             java.sql.Date doj = rs.getDate("date_of_joining");
             if (doj != null) e.setDateOfJoining(doj.toLocalDate());
+            e.setAbout(rs.getString("about"));
             String s = rs.getString("status");
             if (s != null) e.setStatus(EmploymentStatus.valueOf(s));
             java.sql.Timestamp created = rs.getTimestamp("created_at");
@@ -105,8 +106,8 @@ public class EmployeeRepository {
 
     // New: simple insert helper
     public Long save(Employee e) {
-        jdbc.update("INSERT INTO employees (first_name, last_name, email, phone, date_of_joining, department, designation, user_id, company_id, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
-                e.getFirstName(), e.getLastName(), e.getEmail(), e.getPhone(), e.getDateOfJoining(), e.getDepartment(), e.getDesignation(), e.getUser() == null ? null : e.getUser().getId(), e.getCompany() == null ? null : e.getCompany().getId(), e.getStatus() == null ? null : e.getStatus().name());
+        jdbc.update("INSERT INTO employees (first_name, last_name, email, phone, date_of_joining, department, designation, about, user_id, company_id, status, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())",
+                e.getFirstName(), e.getLastName(), e.getEmail(), e.getPhone(), e.getDateOfJoining(), e.getDepartment(), e.getDesignation(), e.getAbout(), e.getUser() == null ? null : e.getUser().getId(), e.getCompany() == null ? null : e.getCompany().getId(), e.getStatus() == null ? null : e.getStatus().name());
         Long id = jdbc.queryForObject("SELECT LAST_INSERT_ID()", Long.class);
         e.setId(id);
         return id;

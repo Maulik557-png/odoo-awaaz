@@ -12,8 +12,7 @@ import LeaveApprovals from './pages/LeaveApprovals';
 import Profile from './pages/Profile';
 import Payroll from './pages/Payroll';
 import ProtectedRoute from './components/ProtectedRoute';
-import Navbar from './components/Navbar';
-import Sidebar from './components/Sidebar';
+import Layout from './components/Layout';
 import Home from './pages/Home';
 
 function App() {
@@ -21,91 +20,53 @@ function App() {
     <AuthProvider>
       <Toaster position="top-right" />
       <Router>
-      <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/employee-dashboard" element={
-            <ProtectedRoute role="Employee">
-              <div className="flex">
-                <Sidebar role="Employee" />
-                <div className="flex-1">
-                  <Navbar />
+        <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+
+            {/* Authenticated Routes wrapped in Layout */}
+            <Route element={<Layout />}>
+              <Route path="/employee-dashboard" element={
+                <ProtectedRoute role="Employee">
                   <EmployeeDashboard />
-                </div>
-              </div>
-            </ProtectedRoute>
-          } />
-          <Route path="/admin-dashboard" element={
-            <ProtectedRoute role="Admin">
-              <div className="flex">
-                <Sidebar role="Admin" />
-                <div className="flex-1">
-                  <Navbar />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin-dashboard" element={
+                <ProtectedRoute role="Admin">
                   <AdminDashboard />
-                </div>
-              </div>
-            </ProtectedRoute>
-          } />
-          <Route path="/attendance" element={
-            <ProtectedRoute>
-              <div className="flex">
-                <Sidebar />
-                <div className="flex-1">
-                  <Navbar />
+                </ProtectedRoute>
+              } />
+              <Route path="/attendance" element={
+                <ProtectedRoute>
                   <Attendance />
-                </div>
-              </div>
-            </ProtectedRoute>
-          } />
-          <Route path="/apply-leave" element={
-            <ProtectedRoute role="Employee">
-              <div className="flex">
-                <Sidebar role="Employee" />
-                <div className="flex-1">
-                  <Navbar />
+                </ProtectedRoute>
+              } />
+              <Route path="/apply-leave" element={
+                <ProtectedRoute role="Employee">
                   <ApplyLeave />
-                </div>
-              </div>
-            </ProtectedRoute>
-          } />
-          <Route path="/leave-approvals" element={
-            <ProtectedRoute role="Admin">
-              <div className="flex">
-                <Sidebar role="Admin" />
-                <div className="flex-1">
-                  <Navbar />
+                </ProtectedRoute>
+              } />
+              <Route path="/leave-approvals" element={
+                <ProtectedRoute role="Admin">
                   <LeaveApprovals />
-                </div>
-              </div>
-            </ProtectedRoute>
-          } />
-          <Route path="/profile" element={
-            <ProtectedRoute>
-              <div className="flex">
-                <Sidebar />
-                <div className="flex-1">
-                  <Navbar />
+                </ProtectedRoute>
+              } />
+              <Route path="/profile" element={
+                <ProtectedRoute>
                   <Profile />
-                </div>
-              </div>
-            </ProtectedRoute>
-          } />
-          <Route path="/payroll" element={
-            <ProtectedRoute>
-              <div className="flex">
-                <Sidebar />
-                <div className="flex-1">
-                  <Navbar />
+                </ProtectedRoute>
+              } />
+              <Route path="/payroll" element={
+                <ProtectedRoute>
                   <Payroll />
-                </div>
-              </div>
-            </ProtectedRoute>
-          } />
-          <Route path="/" element={<Home />} />
-        </Routes>
-      </div>
-    </Router>
+                </ProtectedRoute>
+              } />
+            </Route>
+          </Routes>
+        </div>
+      </Router>
     </AuthProvider>
   );
 }

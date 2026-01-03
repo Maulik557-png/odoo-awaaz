@@ -23,6 +23,7 @@ public class Employee {
     private LocalDate dateOfJoining;
     private String department;
     private String designation;
+    private String about;
     private User user;
     private Company company;
     private EmploymentStatus status = EmploymentStatus.ACTIVE;

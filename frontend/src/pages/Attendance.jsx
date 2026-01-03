@@ -16,7 +16,11 @@ const Attendance = () => {
   const fetchAttendance = async () => {
     try {
       const response = await getAttendance();
-      setAttendance(response.data);
+      let data = response.data;
+      if (user.role === 'Employee') {
+        data = data.filter(a => a.employeeId === user.employeeId);
+      }
+      setAttendance(data);
     } catch (error) {
       toast.error('Failed to load attendance records');
     } finally {
@@ -53,6 +57,16 @@ const Attendance = () => {
     }
   };
 
+  const calculateWorkHours = (inTime, outTime) => {
+    if (!inTime || !outTime) return '-';
+    const [h1, m1] = inTime.split(':').map(Number);
+    const [h2, m2] = outTime.split(':').map(Number);
+    let diff = (h2 * 60 + m2) - (h1 * 60 + m1);
+    const hours = Math.floor(diff / 60);
+    const mins = diff % 60;
+    return `${hours}h ${mins}m`;
+  };
+
   if (loading) {
     return <div className="flex justify-center items-center h-screen">Loading...</div>;
   }
@@ -63,17 +77,8 @@ const Attendance = () => {
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Attendance</h1>
-      {user.role === 'Employee' && (
-        <div className="mb-6">
-          <button
-            onClick={handleCheckInOut}
-            disabled={checkInLoading}
-            className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md disabled:opacity-50"
-          >
-            {checkInLoading ? 'Processing...' : todayRecord ? (todayRecord.checkOutTime ? 'Already Checked Out' : 'Check Out') : 'Check In'}
-          </button>
-        </div>
-      )}
+      <h1 className="text-3xl font-bold mb-6 text-gray-800 dark:text-white">Attendance</h1>
+      {/* Check In/Out moved to TopBar */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
         <table className="w-full">
           <thead className="bg-gray-50 dark:bg-gray-700">
@@ -82,6 +87,7 @@ const Attendance = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Employee</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Check In</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Check Out</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Work Hours</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
             </tr>
           </thead>
@@ -92,6 +98,7 @@ const Attendance = () => {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{record.employeeName}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{record.checkInTime || '-'}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{record.checkOutTime || '-'}</td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{calculateWorkHours(record.checkInTime, record.checkOutTime)}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{record.status}</td>
               </tr>
             ))}
