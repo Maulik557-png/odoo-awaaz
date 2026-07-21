@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.odoo.hackathon.hrms.dto.request.AdminSignUpRequest;
+import com.odoo.hackathon.hrms.dto.request.ChangePasswordRequest;
 import com.odoo.hackathon.hrms.dto.request.LoginRequest;
 import com.odoo.hackathon.hrms.dto.response.LoginResponse;
 import com.odoo.hackathon.hrms.entity.Company;
@@ -159,6 +160,23 @@ public class AuthServiceImpl implements AuthService {
             users.put(u.getLoginId(), u);
             return "admin-created";
         }
+    }
+
+    @Override
+    public void changePassword(String userLoginId, ChangePasswordRequest request) {
+        if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+            throw new IllegalArgumentException("New password and confirm password do not match");
+        }
+        User user = userRepository.findByLoginId(userLoginId)
+                .orElseThrow(() -> new InvalidCredentialsException("User not found"));
+        if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+            throw new InvalidCredentialsException("Current password is incorrect");
+        }
+        String newEncoded = passwordEncoder.encode(request.getNewPassword());
+        userRepository.updatePassword(user.getId(), newEncoded);
+        user.setPassword(newEncoded);
+        user.setIsFirstLogin(false);
+        users.put(user.getLoginId(), user);
     }
 
     // helper to generate a 2-letter company code from company name
