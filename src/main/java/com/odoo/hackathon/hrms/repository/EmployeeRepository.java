@@ -112,4 +112,9 @@ public class EmployeeRepository {
         e.setId(id);
         return id;
     }
+
+    public void update(Employee e) {
+        jdbc.update("UPDATE employees SET first_name = ?, last_name = ?, phone = ?, department = ?, designation = ?, about = ?, status = ?, updated_at = NOW() WHERE id = ?",
+                e.getFirstName(), e.getLastName(), e.getPhone(), e.getDepartment(), e.getDesignation(), e.getAbout(), e.getStatus() == null ? null : e.getStatus().name(), e.getId());
+    }
 }

@@ -78,4 +78,8 @@ public class UserRepository {
         List<User> list = jdbc.query("SELECT * FROM users WHERE id = ?", USER_MAPPER, id);
         return list.stream().findFirst();
     }
+
+    public void updatePassword(Long id, String encodedPassword) {
+        jdbc.update("UPDATE users SET password = ?, is_first_login = FALSE, updated_at = NOW() WHERE id = ?", encodedPassword, id);
+    }
 }
