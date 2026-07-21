@@ -19,7 +19,9 @@ public class Company {
     private String companyCode; // OI for Odoo India
     private String email;
     private String phone;
+    @Builder.Default
     private List<User> users = new ArrayList<>();
+    @Builder.Default
     private List<Employee> employees = new ArrayList<>();
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

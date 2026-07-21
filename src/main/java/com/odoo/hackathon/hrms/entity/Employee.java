@@ -25,7 +25,9 @@ public class Employee {
     private String designation;
     private String about;
     private User user;
-    private Company company;
+    @Builder.Default
+    private Company company = new Company();
+    @Builder.Default
     private EmploymentStatus status = EmploymentStatus.ACTIVE;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
